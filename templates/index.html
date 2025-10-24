@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiPredict - AI-based Yield & Risk Forecaster</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>KrishiPredict</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/predict" class="nav-link">Predict</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/farmer-life" class="nav-link">Farmer Life</a>
+                </li>
+               
+                <li class="nav-item">
+                    <a href="/about" class="nav-link">About Us</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-gradient">AI-Powered</span>
+                    Agricultural Intelligence
+                </h1>
+                <p class="hero-description">
+                    Revolutionizing farming with machine learning. Predict crop yields, assess risks, 
+                    and make informed decisions for better agricultural outcomes in Maharashtra.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/predict" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i>
+                        Start Predicting
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary">
+                        <i class="fas fa-play-circle"></i>
+                        How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Crops Supported</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Predictions</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-animation">
+                <!-- Farmer Animation SVG will be placed here -->
+                <div class="farmer-scene">
+                    <div class="sun"></div>
+                    <div class="field">
+                        <div class="crop crop-1"></div>
+                        <div class="crop crop-2"></div>
+                        <div class="crop crop-3"></div>
+                        <div class="crop crop-4"></div>
+                        <div class="crop crop-5"></div>
+                    </div>
+                    <div class="farmer">
+                        <div class="farmer-body"></div>
+                        <div class="farmer-hat"></div>
+                        <div class="farmer-arm"></div>
+                    </div>
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose KrishiPredict?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Predictions</h3>
+                    <p>Advanced machine learning algorithms analyze multiple parameters to provide accurate yield predictions and risk assessments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>50+ Maharashtra Crops</h3>
+                    <p>Comprehensive database covering all major crops grown in Maharashtra including Jowar, Bajra, Cotton, and Sugarcane.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Risk Management</h3>
+                    <p>Identify potential risks early and get recommendations to mitigate crop failures and maximize yields.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Make informed decisions based on soil health, weather patterns, and historical data analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How KrishiPredict Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Input Crop Details</h3>
+                        <p>Select your crop, soil type, and enter environmental parameters like temperature, rainfall, and soil pH.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>AI Analysis</h3>
+                        <p>Our machine learning model processes your data against thousands of historical patterns.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Get Predictions</h3>
+                        <p>Receive accurate yield predictions and risk assessments with actionable recommendations.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Take Action</h3>
+                        <p>Implement the suggested strategies to optimize your crop production and minimize risks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crops Showcase -->
+    <section class="crops-showcase">
+        <div class="container">
+            <h2 class="section-title">Popular Maharashtra Crops</h2>
+            <div class="crops-grid">
+                <div class="crop-card">
+                    <div class="crop-icon">🌾</div>
+                    <h4>Jowar</h4>
+                    <p>Kharif season staple crop</p>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-icon">🌽</div>
+                    <h4>Bajra</h4>
+                    <p>Drought-resistant millet</p>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-icon">🍚</div>
+                    <h4>Rice</h4>
+                    <p>Konkan region specialty</p>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-icon">👕</div>
+                    <h4>Cotton</h4>
+                    <p>Vidarbha's white gold</p>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-icon">🎋</div>
+                    <h4>Sugarcane</h4>
+                    <p>Major cash crop</p>
+                </div>
+                <div class="crop-card">
+                    <div class="crop-icon">🥜</div>
+                    <h4>Groundnut</h4>
+                    <p>Oilseed crop</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Farming?</h2>
+                <p>Join thousands of farmers in Maharashtra who are using AI to make better agricultural decisions.</p>
+                <a href="/predict" class="btn btn-primary btn-large">
+                    <i class="fas fa-rocket"></i>
+                    Start Predicting Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>KrishiPredict</h3>
+                    <p>AI-powered agricultural intelligence platform for Maharashtra farmers.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/predict">Predict</a></li>
+                        <li><a href="/farmer-life">Farmer Life</a></li>
+                        <li><a href="/chatbot">Chatbot</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Malegaon, Maharashtra</p>
+                    <p><i class="fas fa-phone"></i> +91 83296 15735</p>
+                    <p><i class="fas fa-envelope"></i> info@krishipredict.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p><a href="https://sanketbhamare.vercel.app/"> &copy; 2024 KrishiPredict. All rights reserved.</p></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

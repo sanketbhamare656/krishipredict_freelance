@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Life - KrishiPredict</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Farmer Life Specific Styles */
+        .farmer-hero {
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+            color: white;
+            padding: 100px 0 80px;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .farmer-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .farmer-hero .slogan {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .life-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2e7d32;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: #ff9800;
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* Animation Elements */
+        .farmer-scene {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .animated-farmer {
+            position: absolute;
+            bottom: 50px;
+            left: 10%;
+            animation: farmerWalk 20s linear infinite;
+        }
+
+        .farmer-figure {
+            width: 40px;
+            height: 80px;
+            background: #8B4513;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .farmer-hat {
+            width: 50px;
+            height: 15px;
+            background: #FFD700;
+            border-radius: 25px 25px 0 0;
+            position: absolute;
+            top: -15px;
+            left: -5px;
+        }
+
+        .farmer-tool {
+            position: absolute;
+            top: 20px;
+            right: -15px;
+            width: 20px;
+            height: 5px;
+            background: #8B4513;
+            animation: toolSwing 2s ease-in-out infinite;
+        }
+
+        .crop-field {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #8FBC8F;
+        }
+
+        .growing-crop {
+            position: absolute;
+            bottom: 0;
+            width: 15px;
+            height: 30px;
+            background: #228B22;
+            border-radius: 8px 8px 0 0;
+            animation: grow 4s ease-in-out infinite;
+        }
+
+        .crop-1 { left: 20%; animation-delay: 0s; }
+        .crop-2 { left: 35%; animation-delay: 0.5s; }
+        .crop-3 { left: 50%; animation-delay: 1s; }
+        .crop-4 { left: 65%; animation-delay: 1.5s; }
+        .crop-5 { left: 80%; animation-delay: 2s; }
+
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: sunGlow 3s ease-in-out infinite alternate;
+        }
+
+        /* Cultural Elements */
+        .cultural-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .cultural-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .cultural-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .cultural-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Season Timeline */
+        .season-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .season-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e0e0e0;
+            transform: translateY(-50%);
+        }
+
+        .season-phase {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .season-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Animations */
+        @keyframes farmerWalk {
+            0% { left: 10%; }
+            50% { left: 70%; }
+            100% { left: 10%; }
+        }
+
+        @keyframes toolSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        @keyframes grow {
+            0%, 100% { height: 30px; }
+            50% { height: 50px; }
+        }
+
+        @keyframes sunGlow {
+            0% { box-shadow: 0 0 20px #FFD700; }
+            100% { box-shadow: 0 0 40px #FF4500; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .farmer-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .season-timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .season-timeline::before {
+                display: none;
+            }
+        }
+
+        /* Slogan Styles */
+        .slogan-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .marathi-slogan {
+            font-family: 'Arial', sans-serif;
+            font-size: 2rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .english-translation {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>KrishiPredict</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/predict" class="nav-link">Predict & Recommend</a></li>
+                <li class="nav-item"><a href="/farmer-life" class="nav-link active">Farmer Life</a></li>
+                
+                <li class="nav-item"><a href="/about" class="nav-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="farmer-hero">
+        <div class="container">
+            <h1>🌾 जय जवान जय किसान 🌾</h1>
+            <div class="slogan-container">
+                <div class="marathi-slogan">"शेतकरी आहे माझी ओळख, शेती आहे माझी जीवनशैली"</div>
+                <div class="english-translation">"Farming is my identity, Agriculture is my lifestyle"</div>
+            </div>
+            <p>The Heartbeat of Maharashtra's Agriculture</p>
+        </div>
+    </section>
+
+    <!-- Animated Farmer Scene -->
+    <div class="container">
+        <div class="farmer-scene">
+            <div class="sun"></div>
+            <div class="animated-farmer">
+                <div class="farmer-figure">
+                    <div class="farmer-hat"></div>
+                    <div class="farmer-tool"></div>
+                </div>
+            </div>
+            <div class="crop-field">
+                <div class="growing-crop crop-1"></div>
+                <div class="growing-crop crop-2"></div>
+                <div class="growing-crop crop-3"></div>
+                <div class="growing-crop crop-4"></div>
+                <div class="growing-crop crop-5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Farmer Life Overview -->
+    <section class="life-section">
+        <div class="container">
+            <h2 class="section-title">The Life of Maharashtra's Annadata</h2>
+            
+            <div class="cultural-grid">
+                <div class="cultural-card">
+                    <div class="cultural-icon">🌅</div>
+                    <h3>Early Morning Start</h3>
+                    <p>Farmers begin their day before sunrise, preparing for fieldwork with traditional tools and modern equipment</p>
+                </div>
+                
+                <div class="cultural-card">
+                    <div class="cultural-icon">👨‍🌾</div>
+                    <h3>Hard Work & Dedication</h3>
+                    <p>Working tirelessly in fields under the sun, maintaining crops and ensuring good harvest</p>
+                </div>
+                
+                <div class="cultural-card">
+                    <div class="cultural-icon">🌧️</div>
+                    <h3>Monsoon Dependency</h3>
+                    <p>Life revolves around monsoon patterns - from sowing to harvesting seasons</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agricultural Seasons -->
+    <section class="life-section" style="background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Maharashtra's Agricultural Calendar</h2>
+            
+            <div class="season-timeline">
+                <div class="season-phase">
+                    <div class="season-icon">🌱</div>
+                    <h4>Kharif</h4>
+                    <p>June - October</p>
+                    <small>Monsoon Crops: Rice, Cotton, Soybean</small>
+                </div>
+                
+                <div class="season-phase">
+                    <div class="season-icon">🌾</div>
+                    <h4>Rabi</h4>
+                    <p>November - March</p>
+                    <small>Winter Crops: Wheat, Onion, Gram</small>
+                </div>
+                
+                <div class="season-phase">
+                    <div class="season-icon">☀️</div>
+                    <h4>Summer</h4>
+                    <p>April - May</p>
+                    <small>Water Management & Preparation</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Traditional Practices -->
+    <section class="life-section" style="background: linear-gradient(135deg, #ff9800, #ff5722); color: white;">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Traditional Wisdom Meets Modern Technology</h2>
+            
+            <div class="cultural-grid">
+                <div class="cultural-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                    <div class="cultural-icon">💧</div>
+                    <h3>Water Conservation</h3>
+                    <p>Traditional water harvesting methods combined with modern drip irrigation</p>
+                </div>
+                
+                <div class="cultural-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                    <div class="cultural-icon">🌿</div>
+                    <h3>Organic Farming</h3>
+                    <p>Natural pest control and organic fertilizers from generations of experience</p>
+                </div>
+                
+                <div class="cultural-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                    <div class="cultural-icon">🤖</div>
+                    <h3>AI Integration</h3>
+                    <p>KrishiPredict bringing artificial intelligence to traditional farming practices</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inspirational Slogans -->
+    <section class="life-section">
+        <div class="container">
+            <h2 class="section-title">Voice of the Farmer</h2>
+            
+            <div class="slogan-container" style="background: #2e7d32; color: white;">
+                <div class="marathi-slogan">"उभा राहीन मी शेतापुढे, जगवीन मी ही माती"</div>
+                <div class="english-translation">"I will stand before my field, I will bring life to this soil"</div>
+            </div>
+            
+            <div class="slogan-container" style="background: #ff9800; color: white; margin-top: 2rem;">
+                <div class="marathi-slogan">"शेती हेच खरे सोने, शेतकरी हा खरा धनी"</div>
+                <div class="english-translation">"Farming is the real gold, Farmer is the true owner"</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="life-section" style="background: #2e7d32; color: white; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Join the Agricultural Revolution</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">Use KrishiPredict to make informed decisions and honor the legacy of Maharashtra's farmers</p>
+            <a href="/predict" class="btn btn-primary" style="background: white; color: #2e7d32; padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; border-radius: 8px; display: inline-block;">
+                <i class="fas fa-chart-line"></i> Start Predicting Now
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Add interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats counting
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = target / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target + (stat.textContent.includes('%') ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : '+');
+                    }
+                }, 50);
+            });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.cultural-card, .season-phase, .stat-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

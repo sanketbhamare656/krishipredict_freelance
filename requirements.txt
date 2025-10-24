@@ -1,0 +1,10 @@
+Flask
+pandas
+numpy
+scikit-learn
+joblib
+gunicorn
+Werkzeug
+Jinja2
+click
+threadpoolctl

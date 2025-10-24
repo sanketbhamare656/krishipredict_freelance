@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict & Recommend - KrishiPredict</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>KrishiPredict</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/predict" class="nav-link active">Predict & Recommend</a></li>
+                <li class="nav-item"><a href="/farmer-life" class="nav-link">Farmer Life</a></li>
+                
+                <li class="nav-item"><a href="/about" class="nav-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="predict-container">
+        <div class="predict-header">
+            <h1><i class="fas fa-calculator"></i> Crop Prediction & Recommendation</h1>
+            <p>Get AI-powered yield predictions for specific crops OR discover the best crops for your field conditions</p>
+        </div>
+
+        <!-- Mode Selection Tabs -->
+        <div class="mode-tabs">
+            <button class="tab-btn active" data-tab="predict-tab">
+                <i class="fas fa-chart-line"></i> Predict Yield
+            </button>
+            <button class="tab-btn" data-tab="recommend-tab">
+                <i class="fas fa-lightbulb"></i> Recommend Crops
+            </button>
+        </div>
+
+        <!-- Predict Yield Tab -->
+        <div class="tab-content active" id="predict-tab">
+            <div class="predict-content">
+                <div class="form-section">
+                    <form id="predictionForm">
+                        <div class="form-grid">
+                            <!-- Crop Selection -->
+                            <div class="form-group">
+                                <label for="crop_name"><i class="fas fa-leaf"></i> Crop Name</label>
+                                <select id="crop_name" name="crop_name" required>
+                                    <option value="">Select Crop</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+
+                            <!-- Soil Type -->
+                            <div class="form-group">
+                                <label for="soil_type"><i class="fas fa-mountain"></i> Soil Type</label>
+                                <select id="soil_type" name="soil_type" required>
+                                    <option value="">Select Soil Type</option>
+                                    <option value="Black Cotton">Black Cotton</option>
+                                    <option value="Laterite">Laterite</option>
+                                    <option value="Alluvial">Alluvial</option>
+                                    <option value="Red">Red</option>
+                                    <option value="Mountain">Mountain</option>
+                                </select>
+                            </div>
+
+                            <!-- Environmental Parameters -->
+                            <div class="form-group">
+                                <label for="rainfall"><i class="fas fa-cloud-rain"></i> Rainfall (mm)</label>
+                                <input type="number" id="rainfall" name="rainfall" min="300" max="2000" step="10" required>
+                                <small>Annual rainfall in millimeters</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temperature"><i class="fas fa-thermometer-half"></i> Temperature (°C)</label>
+                                <input type="number" id="temperature" name="temperature" min="15" max="35" step="0.1" required>
+                                <small>Average temperature in Celsius</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="humidity"><i class="fas fa-tint"></i> Humidity (%)</label>
+                                <input type="number" id="humidity" name="humidity" min="40" max="90" step="1" required>
+                                <small>Relative humidity percentage</small>
+                            </div>
+
+                            <!-- Soil Health Parameters -->
+                            <div class="form-group">
+                                <label for="soil_ph"><i class="fas fa-vial"></i> Soil pH</label>
+                                <input type="number" id="soil_ph" name="soil_ph" min="5.0" max="8.5" step="0.1" required>
+                                <small>Soil pH level (5.0 - 8.5)</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nitrogen"><i class="fas fa-atom"></i> Nitrogen (N) kg/ha</label>
+                                <input type="number" id="nitrogen" name="nitrogen" min="10" max="150" step="1" required>
+                                <small>Nitrogen content in soil</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phosphorus"><i class="fas fa-atom"></i> Phosphorus (P) kg/ha</label>
+                                <input type="number" id="phosphorus" name="phosphorus" min="10" max="100" step="1" required>
+                                <small>Phosphorus content in soil</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="potassium"><i class="fas fa-atom"></i> Potassium (K) kg/ha</label>
+                                <input type="number" id="potassium" name="potassium" min="10" max="120" step="1" required>
+                                <small>Potassium content in soil</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-predict">
+                            <i class="fas fa-chart-line"></i> Predict Yield & Risk
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section for Prediction -->
+                <div class="results-section" id="predictResultsSection" style="display: none;">
+                    <h2><i class="fas fa-chart-bar"></i> Yield Prediction Results</h2>
+                    
+                    <div class="results-grid">
+                        <div class="result-card yield-card">
+                            <div class="card-header">
+                                <i class="fas fa-weight-hanging"></i>
+                                <h3>Predicted Yield</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="yield-value" id="yieldValue">--</div>
+                                <div class="yield-unit">quintals/hectare</div>
+                            </div>
+                        </div>
+
+                        <div class="result-card risk-card">
+                            <div class="card-header">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h3>Risk Level</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="risk-indicator" id="riskIndicator">
+                                    <span class="risk-dot"></span>
+                                    <span class="risk-text" id="riskText">--</span>
+                                </div>
+                                <div class="risk-description" id="riskDescription"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="recommendations" id="recommendationsSection">
+                        <h3><i class="fas fa-lightbulb"></i> Recommendations</h3>
+                        <div class="recommendations-list" id="recommendationsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommend Crops Tab -->
+        <div class="tab-content" id="recommend-tab">
+            <div class="predict-content">
+                <div class="form-section">
+                    <form id="recommendationForm">
+                        <div class="form-grid">
+                            <!-- Soil Type -->
+                            <div class="form-group">
+                                <label for="rec_soil_type"><i class="fas fa-mountain"></i> Soil Type</label>
+                                <select id="rec_soil_type" name="soil_type" required>
+                                    <option value="">Select Soil Type</option>
+                                    <option value="Black Cotton">Black Cotton</option>
+                                    <option value="Laterite">Laterite</option>
+                                    <option value="Alluvial">Alluvial</option>
+                                    <option value="Red">Red</option>
+                                    <option value="Mountain">Mountain</option>
+                                </select>
+                            </div>
+
+                            <!-- Season (Optional) -->
+                            <div class="form-group">
+                                <label for="season"><i class="fas fa-calendar"></i> Season (Optional)</label>
+                                <select id="season" name="season">
+                                    <option value="">Any Season</option>
+                                    <option value="Kharif">Kharif (Monsoon)</option>
+                                    <option value="Rabi">Rabi (Winter)</option>
+                                </select>
+                            </div>
+
+                            <!-- Environmental Parameters -->
+                            <div class="form-group">
+                                <label for="rec_temperature"><i class="fas fa-thermometer-half"></i> Temperature (°C)</label>
+                                <input type="number" id="rec_temperature" name="temperature" min="15" max="35" step="0.1" required>
+                                <small>Average temperature in Celsius</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rec_rainfall"><i class="fas fa-cloud-rain"></i> Rainfall (mm)</label>
+                                <input type="number" id="rec_rainfall" name="rainfall" min="300" max="2000" step="10" required>
+                                <small>Annual rainfall in millimeters</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rec_humidity"><i class="fas fa-tint"></i> Humidity (%)</label>
+                                <input type="number" id="rec_humidity" name="humidity" min="40" max="90" step="1" required>
+                                <small>Relative humidity percentage</small>
+                            </div>
+
+                            <!-- Soil Health Parameters -->
+                            <div class="form-group">
+                                <label for="rec_soil_ph"><i class="fas fa-vial"></i> Soil pH</label>
+                                <input type="number" id="rec_soil_ph" name="soil_ph" min="5.0" max="8.5" step="0.1" required>
+                                <small>Soil pH level (5.0 - 8.5)</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rec_nitrogen"><i class="fas fa-atom"></i> Nitrogen (N) kg/ha</label>
+                                <input type="number" id="rec_nitrogen" name="nitrogen" min="10" max="150" step="1" required>
+                                <small>Nitrogen content in soil</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rec_phosphorus"><i class="fas fa-atom"></i> Phosphorus (P) kg/ha</label>
+                                <input type="number" id="rec_phosphorus" name="phosphorus" min="10" max="100" step="1" required>
+                                <small>Phosphorus content in soil</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rec_potassium"><i class="fas fa-atom"></i> Potassium (K) kg/ha</label>
+                                <input type="number" id="rec_potassium" name="potassium" min="10" max="120" step="1" required>
+                                <small>Potassium content in soil</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-predict">
+                            <i class="fas fa-search"></i> Find Best Crops
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section for Recommendation -->
+                <div class="results-section" id="recommendResultsSection" style="display: none;">
+                    <h2><i class="fas fa-trophy"></i> Top 5 Recommended Crops</h2>
+                    
+                    <div class="recommendations-grid" id="recommendationsGrid">
+                        <!-- Crop recommendations will be inserted here -->
+                    </div>
+
+                    <div class="input-summary" id="inputSummary">
+                        <h3><i class="fas fa-info-circle"></i> Your Input Conditions</h3>
+                        <div id="conditionsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update active tab content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // Initialize crop predictor
+            window.cropPredictor = new CropPredictor();
+        });
+
+        class CropPredictor {
+            constructor() {
+                this.crops = [];
+                this.init();
+            }
+
+            async init() {
+                await this.loadCrops();
+                this.setupEventListeners();
+            }
+
+            async loadCrops() {
+                try {
+                    const response = await fetch('/api/crops');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.crops = data.crops;
+                        this.populateCropDropdown();
+                    }
+                } catch (error) {
+                    console.error('Error loading crops:', error);
+                }
+            }
+
+            populateCropDropdown() {
+                const cropSelect = document.getElementById('crop_name');
+                if (cropSelect) {
+                    // Clear existing options except the first one
+                    while (cropSelect.options.length > 1) {
+                        cropSelect.remove(1);
+                    }
+
+                    // Add crop options
+                    this.crops.forEach(crop => {
+                        const option = document.createElement('option');
+                        option.value = crop;
+                        option.textContent = crop;
+                        cropSelect.appendChild(option);
+                    });
+                }
+            }
+
+            setupEventListeners() {
+                // Prediction form
+                const predictionForm = document.getElementById('predictionForm');
+                if (predictionForm) {
+                    predictionForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handlePrediction();
+                    });
+                }
+
+                // Recommendation form
+                const recommendationForm = document.getElementById('recommendationForm');
+                if (recommendationForm) {
+                    recommendationForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleRecommendation();
+                    });
+                }
+            }
+
+            async handlePrediction() {
+                const form = document.getElementById('predictionForm');
+                const formData = new FormData(form);
+                
+                const data = {
+                    crop_name: formData.get('crop_name'),
+                    soil_type: formData.get('soil_type'),
+                    rainfall: parseFloat(formData.get('rainfall')),
+                    temperature: parseFloat(formData.get('temperature')),
+                    humidity: parseFloat(formData.get('humidity')),
+                    soil_ph: parseFloat(formData.get('soil_ph')),
+                    nitrogen: parseFloat(formData.get('nitrogen')),
+                    phosphorus: parseFloat(formData.get('phosphorus')),
+                    potassium: parseFloat(formData.get('potassium'))
+                };
+
+                // Show loading state
+                const predictBtn = document.querySelector('#predict-tab .btn-predict');
+                const originalText = predictBtn.innerHTML;
+                predictBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+                predictBtn.disabled = true;
+
+                try {
+                    const response = await fetch('/api/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.displayPredictionResults(result);
+                    } else {
+                        this.showError(result.error);
+                    }
+                } catch (error) {
+                    this.showError('Network error. Please try again.');
+                } finally {
+                    // Reset button
+                    predictBtn.innerHTML = originalText;
+                    predictBtn.disabled = false;
+                }
+            }
+
+            async handleRecommendation() {
+                const form = document.getElementById('recommendationForm');
+                const formData = new FormData(form);
+                
+                const data = {
+                    soil_type: formData.get('soil_type'),
+                    temperature: parseFloat(formData.get('temperature')),
+                    rainfall: parseFloat(formData.get('rainfall')),
+                    humidity: parseFloat(formData.get('humidity')),
+                    soil_ph: parseFloat(formData.get('soil_ph')),
+                    nitrogen: parseFloat(formData.get('nitrogen')),
+                    phosphorus: parseFloat(formData.get('phosphorus')),
+                    potassium: parseFloat(formData.get('potassium')),
+                    season: formData.get('season')
+                };
+
+                // Show loading state
+                const recommendBtn = document.querySelector('#recommend-tab .btn-predict');
+                const originalText = recommendBtn.innerHTML;
+                recommendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+                recommendBtn.disabled = true;
+
+                try {
+                    const response = await fetch('/api/recommend-crops', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.displayRecommendationResults(result);
+                    } else {
+                        this.showError(result.error);
+                    }
+                } catch (error) {
+                    this.showError('Network error. Please try again.');
+                } finally {
+                    // Reset button
+                    recommendBtn.innerHTML = originalText;
+                    recommendBtn.disabled = false;
+                }
+            }
+
+            displayPredictionResults(result) {
+                const resultsSection = document.getElementById('predictResultsSection');
+                const yieldValue = document.getElementById('yieldValue');
+                const riskText = document.getElementById('riskText');
+                const riskIndicator = document.getElementById('riskIndicator');
+                const riskDescription = document.getElementById('riskDescription');
+                const recommendationsList = document.getElementById('recommendationsList');
+
+                // Update yield
+                yieldValue.textContent = result.yield;
+
+                // Update risk level with styling
+                riskText.textContent = result.risk_level;
+                riskIndicator.className = `risk-indicator risk-${result.risk_level.toLowerCase()}`;
+                
+                // Set risk description
+                const riskDescriptions = {
+                    'Low': 'Favorable conditions with minimal risk factors.',
+                    'Medium': 'Moderate risk. Some factors need attention.',
+                    'High': 'High risk conditions detected. Immediate action recommended.'
+                };
+                riskDescription.textContent = riskDescriptions[result.risk_level];
+
+                // Update recommendations
+                recommendationsList.innerHTML = '';
+                result.recommendations.forEach(rec => {
+                    const li = document.createElement('li');
+                    li.textContent = rec;
+                    recommendationsList.appendChild(li);
+                });
+
+                // Show results section
+                resultsSection.style.display = 'block';
+
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            displayRecommendationResults(result) {
+                const resultsSection = document.getElementById('recommendResultsSection');
+                const recommendationsGrid = document.getElementById('recommendationsGrid');
+                const conditionsList = document.getElementById('conditionsList');
+
+                // Display recommended crops
+                recommendationsGrid.innerHTML = '';
+                result.recommended_crops.forEach((crop, index) => {
+                    const cropCard = this.createCropCard(crop, index + 1);
+                    recommendationsGrid.appendChild(cropCard);
+                });
+
+                // Display input conditions
+                conditionsList.innerHTML = this.createConditionsList(result.input_conditions);
+
+                // Show results section
+                resultsSection.style.display = 'block';
+
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            createCropCard(crop, rank) {
+                const card = document.createElement('div');
+                card.className = `crop-recommendation-card ${crop.risk_level.toLowerCase()}-risk`;
+                
+                const rankClass = rank === 1 ? 'first' : rank === 2 ? 'second' : rank === 3 ? 'third' : '';
+                const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                
+                card.innerHTML = `
+                    <div class="crop-rank ${rankClass}">${rankIcon}</div>
+                    <div class="crop-name">${crop.crop}</div>
+                    <div class="crop-details">
+                        <div class="crop-yield">
+                            <i class="fas fa-weight-hanging"></i>
+                            <span>${crop.predicted_yield} q/ha</span>
+                        </div>
+                        <div class="crop-risk risk-${crop.risk_level.toLowerCase()}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>${crop.risk_level} Risk</span>
+                        </div>
+                        <div class="crop-season">
+                            <i class="fas fa-calendar"></i>
+                            <span>${crop.season}</span>
+                        </div>
+                        <div class="crop-score">
+                            <i class="fas fa-star"></i>
+                            <span>Suitability: ${crop.suitability_score}/25</span>
+                        </div>
+                    </div>
+                `;
+                
+                return card;
+            }
+
+            createConditionsList(conditions) {
+                return `
+                    <div class="conditions-grid">
+                        <div class="condition-item">
+                            <strong>Soil Type:</strong> ${conditions.soil_type}
+                        </div>
+                        <div class="condition-item">
+                            <strong>Temperature:</strong> ${conditions.temperature}°C
+                        </div>
+                        <div class="condition-item">
+                            <strong>Rainfall:</strong> ${conditions.rainfall} mm
+                        </div>
+                        <div class="condition-item">
+                            <strong>Humidity:</strong> ${conditions.humidity}%
+                        </div>
+                        <div class="condition-item">
+                            <strong>Soil pH:</strong> ${conditions.soil_ph}
+                        </div>
+                        <div class="condition-item">
+                            <strong>Nitrogen:</strong> ${conditions.nitrogen} kg/ha
+                        </div>
+                        <div class="condition-item">
+                            <strong>Phosphorus:</strong> ${conditions.phosphorus} kg/ha
+                        </div>
+                        <div class="condition-item">
+                            <strong>Potassium:</strong> ${conditions.potassium} kg/ha
+                        </div>
+                        ${conditions.season ? `<div class="condition-item">
+                            <strong>Season:</strong> ${conditions.season}
+                        </div>` : ''}
+                    </div>
+                `;
+            }
+
+            showError(message) {
+                alert('Error: ' + message);
+            }
+        }
+    </script>
+
+    <style>
+        /* Tab Styles */
+        .mode-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: #2e7d32;
+            color: white;
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+        }
+
+        .tab-btn:not(.active):hover {
+            background: #f8f9fa;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Recommendation Styles */
+        .recommendations-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .crop-recommendation-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4caf50;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .crop-recommendation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .crop-recommendation-card.low-risk {
+            border-left-color: #4caf50;
+        }
+
+        .crop-recommendation-card.medium-risk {
+            border-left-color: #ff9800;
+        }
+
+        .crop-recommendation-card.high-risk {
+            border-left-color: #f44336;
+        }
+
+        .crop-rank {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: #ffd700;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .crop-rank.first { background: #ffd700; }
+        .crop-rank.second { background: #c0c0c0; }
+        .crop-rank.third { background: #cd7f32; }
+
+        .crop-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #2e7d32;
+        }
+
+        .crop-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .crop-yield, .crop-risk, .crop-season, .crop-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .risk-low { color: #4caf50; }
+        .risk-medium { color: #ff9800; }
+        .risk-high { color: #f44336; }
+
+        .input-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .condition-item {
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #4caf50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mode-tabs {
+                flex-direction: column;
+            }
+            
+            .crop-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .conditions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

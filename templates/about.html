@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - KrishiPredict</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* About Us Specific Styles */
+        .about-hero {
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+            color: white;
+            padding: 100px 0 80px;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .about-hero .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mission-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2e7d32;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: #ff9800;
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* Mission Cards */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .mission-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border-left: 5px solid #2e7d32;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .mission-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #2e7d32;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 80px 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .team-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .team-role {
+            color: #ff9800;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 35px;
+            height: 35px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #2e7d32;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Technology Stack */
+        .tech-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+        }
+
+        .tech-section .section-title {
+            color: white;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .tech-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Statistics */
+        .stats-section {
+            padding: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 5px solid #2e7d32;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #2e7d32;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+            width: 50%;
+            padding: 0 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: #2e7d32;
+            border-radius: 50%;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -40px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+
+            .timeline-content::before {
+                left: -40px !important;
+            }
+        }
+
+        /* Animation Styles */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>KrishiPredict</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/predict" class="nav-link">Predict & Recommend</a></li>
+                <li class="nav-item"><a href="/farmer-life" class="nav-link">Farmer Life</a></li>
+                
+                <li class="nav-item"><a href="/about" class="nav-link active">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About KrishiPredict</h1>
+            <p class="tagline">Revolutionizing Agriculture through Artificial Intelligence and Machine Learning</p>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="container">
+            <h2 class="section-title">Our Mission & Vision</h2>
+            <div class="mission-grid">
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">🎯</div>
+                    <h3>Our Mission</h3>
+                    <p>To empower farmers with AI-driven insights for better crop management, risk assessment, and sustainable agricultural practices.</p>
+                </div>
+                
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">👁️</div>
+                    <h3>Our Vision</h3>
+                    <p>To create a world where every farmer has access to intelligent farming tools that maximize yield and minimize risks.</p>
+                </div>
+                
+                <div class="mission-card fade-in">
+                    <div class="mission-icon">💡</div>
+                    <h3>Our Approach</h3>
+                    <p>Combining traditional farming wisdom with cutting-edge AI technology to solve real-world agricultural challenges.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Our Story</h2>
+            <div class="mission-card" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                <p>KrishiPredict was born from a simple observation: while technology was advancing rapidly in urban sectors, our farmers - the backbone of our nation - were still relying on traditional methods and guesswork.</p>
+                
+                <p>Founded in 2024, we set out to bridge this gap by developing an intelligent system that could analyze multiple environmental factors and provide accurate predictions for crop yield and risk assessment.</p>
+                
+                <p>Our name "KrishiPredict" combines "Krishi" (Agriculture in Sanskrit) with "Predict," representing our commitment to bringing predictive analytics to Indian farming.</p>
+                
+                <p>Today, we're proud to serve farmers across Maharashtra, helping them make data-driven decisions for better agricultural outcomes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="tech-section">
+        <div class="container">
+            <h2 class="section-title">Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">🤖</div>
+                    <h4>Machine Learning</h4>
+                    <p>Random Forest algorithms for accurate predictions</p>
+                </div>
+                
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">🐍</div>
+                    <h4>Python & Flask</h4>
+                    <p>Robust backend with scikit-learn and pandas</p>
+                </div>
+                
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">⚡</div>
+                    <h4>Real-time Analytics</h4>
+                    <p>Instant predictions based on current data</p>
+                </div>
+                
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">📊</div>
+                    <h4>Data Science</h4>
+                    <p>Comprehensive analysis of agricultural data</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title">Our Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Farmers Empowered</div>
+                </div>
+                
+                <div class="stat-card fade-in">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Prediction Accuracy</div>
+                </div>
+                
+                <div class="stat-card fade-in">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Crops Supported</div>
+                </div>
+                
+                <div class="stat-card fade-in">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Successful Predictions</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+        <div class="container">
+            <h2 class="section-title">Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h4>Stage  1</h4>
+                        <p>Concept development and initial research on agricultural challenges</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h4>Stage  2</h4>
+                        <p>Development of machine learning models and data collection</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h4>Stage 3</h4>
+                        <p>First successful prototype and initial testing with farmers</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h4>Stage 4</h4>
+                        <p>Launch of KrishiPredict web application</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h4>Future</h4>
+                        <p>Expansion to more regions and additional features</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+<section class="team-section">
+    <div class="container">
+      <h2 class="section-title">Meet Our Team</h2>
+      <div class="team-grid">
+  
+        <!-- Team Member 1 -->
+        <div class="team-card fade-in">
+          <div class="team-avatar">
+            <img src="static/images/demo.jpg" width="250" height="200" alt="Member 1">
+          </div>
+          <h3>Mayuri Shewale </h3>
+          <!-- <div class="team-role">Founder & CEO</div>
+          <p>Agriculture Technologist with 10+ years of experience.</p> -->
+          <div class="team-social">
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+  
+        <!-- Team Member 2 -->
+        <div class="team-card fade-in">
+          <div class="team-avatar">
+            <img src="static/images/demo.jpg" width="250" height="200" alt="Member 1">
+          </div>
+          <h3> Nutan Shewale</h3>
+          <!-- <div class="team-role">Data Scientist</div>
+          <p>ML Specialist focused on agricultural analytics.</p> -->
+          <div class="team-social">
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+  
+        <!-- Team Member 3 -->
+        <div class="team-card fade-in">
+          <div class="team-avatar">
+            <img src="static/images/demo.jpg" width="250" height="200" alt="Member 1">
+                  </div>
+          <h3>Tanuja Shewale</h3>
+          <!-- <div class="team-role">Agricultural Expert</div>
+          <p>Former farmer with deep field experience.</p> -->
+          <div class="team-social">
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+  
+        <!-- Team Member 4 -->
+        <div class="team-card fade-in">
+          <div class="team-avatar">
+            <img src="static/images/demo.jpg" width="250" height="200" alt="Member 1">
+          </div>
+          <h3>Neha Bachhav</h3>
+          <!-- <div class="team-role">Full Stack Developer</div>
+          <p>Web development and user experience design.</p> -->
+          <div class="team-social">
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+  
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-info">
+                <div class="contact-card fade-in">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <h3>Email Us</h3>
+                    <p>info@krishipredict.com</p>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <h3>Call Us</h3>
+                    <p>+91 83296 15735</p>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <h3>Visit Us</h3>
+                    <p>Malegaon, Maharashtra</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <a href="/predict" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; display: inline-block;">
+                    <i class="fas fa-rocket"></i> Start Using KrishiPredict
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Animate statistics
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const originalText = stat.textContent;
+                const target = parseInt(originalText);
+                let current = 0;
+                const increment = target / 30;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = originalText;
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current) + (originalText.includes('%') ? '%' : '+');
+                    }
+                }, 50);
+            });
+        });
+    </script>
+</body>
+</html>
